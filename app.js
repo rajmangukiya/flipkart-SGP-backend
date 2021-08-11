@@ -19,10 +19,13 @@ setup(app)
 setSwagger(app)
 intigrateDB()
 
+console.log("DEveloper-dixit");
+
 databaseConnection()
 .then(() => {
   app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`);
+    
   })
 })
 .catch((error) => {
