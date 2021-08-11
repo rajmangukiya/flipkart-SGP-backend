@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import bodyParser from 'body-parser';
 import { databaseConnection } from './src/database/index.js';
 import { intigrateDB } from './src/api/entity/index.js';
+import { setSwagger } from './src/utils/swagger.js';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false })) // do not know the exactly use
 
 setup(app)
+setSwagger(app)
 intigrateDB()
 
 databaseConnection()

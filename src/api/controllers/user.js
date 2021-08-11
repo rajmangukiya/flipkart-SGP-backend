@@ -3,6 +3,8 @@ import Joi from "joi";
 import { bcryptPassword, comparePassword } from "../../utils/bcrypt.js";
 import { User } from "../entity/user.js";
 import httpStatus from "http-status";
+import { apiResponse } from "../../utils/api-response.js";
+import { getToken } from "../../utils/jwt.js";
 
 const signup = {
   validator: celebrate({
@@ -16,19 +18,51 @@ const signup = {
     })
   }),
   controller: async (req, res) => {
+    try {
 
-    const password = await bcryptPassword(req.body.password, 10);
+      const checkUser = await User.findOne({
+        where: {
+          email: req.body.email
+        }
+      })
 
-    const user = await User.create({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      mobile: req.body.mobile,
-      password,
-      api_key: req.body.api_key,
-    })
+      if(checkUser) {
+        return apiResponse(
+          res,
+          httpStatus.BAD_REQUEST,
+          null,
+          "Error",
+          "User is already registered with this email"
+        )
+      }
 
-    res.send(user);
+      const password = await bcryptPassword(req.body.password, 10);
+
+      const user = await User.create({
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        mobile: req.body.mobile,
+        password,
+        api_key: req.body.api_key,
+      })
+
+      return apiResponse(
+        res,
+        httpStatus.OK,
+        null,
+        "User registered successfully",
+        null
+      )
+    } catch (error) {
+      return apiResponse(
+        res,
+        httpStatus.BAD_REQUEST,
+        null,
+        "Error",
+        "Error in controller: " + error
+      )
+    }
   }
 }
 
@@ -40,38 +74,53 @@ const login = {
     })
   }),
   controller: async (req, res) => {
+    try {
+      const emailCheck = await User.findOne({
+        where: {
+          email: req.body.email
+        }
+      })
 
-    const emailCheck = await User.findOne({
-      where: {
-        email: req.body.email
+      if (!emailCheck) {
+        return apiResponse(
+          res,
+          httpStatus.NOT_FOUND,
+          null,
+          "Error",
+          "Wrong email address"
+        )
       }
-    })
 
-    if (!emailCheck) {
-      return res
-        .status(httpStatus.NOT_FOUND)
-        .json(new APIResponse(
+      const passwordCheck = await comparePassword(req.body.password, emailCheck.password);
+
+      if (!passwordCheck) {
+        return apiResponse(
+          res,
+          httpStatus.BAD_REQUEST,
           null,
-          "Wrong email address",
-        ));
+          "Error",
+          "Wrong password"
+        )
+      }
+
+      const token = getToken({ id: emailCheck.id });
+
+      return apiResponse(
+        res,
+        httpStatus.OK,
+        token,
+        "Login Successfully",
+        null
+      )
+    } catch (error) {
+      return apiResponse(
+        res,
+        httpStatus.BAD_GATEWAY,
+        null,
+        "Error",
+        "Error in controller: " + error
+      )
     }
-
-    const passwordCheck = comparePassword(req.body.password, email.password);
-
-    if (!passwordCheck) {
-      return res
-        .status(httpStatus.BAD_REQUEST)
-        .json(new APIResponse(
-          null,
-          "Wrong password",
-        ));
-    }
-
-    return res
-      .status(httpStatus.OK)
-      .json(
-        new APIResponse("Login Successfully")
-      );
   }
 }
 
