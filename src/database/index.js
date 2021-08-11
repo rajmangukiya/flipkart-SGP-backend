@@ -3,6 +3,8 @@ import { development } from './config.js';
 
 const database = postgres(development)
 
+console.log("");
+
 export {
   database
 }
