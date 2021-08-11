@@ -1,10 +1,17 @@
-import postgres from 'pg-promise';
 import { development } from './config.js';
 
-const database = postgres(development)
-
-console.log("");
+const databaseConnection = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await development.authenticate();
+      console.log("Connection has been established successfully.");
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  })
+}
 
 export {
-  database
+  databaseConnection
 }

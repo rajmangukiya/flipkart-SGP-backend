@@ -2,6 +2,8 @@ import express from 'express'
 import { setup } from './src/api/routes/index.js';
 import dotenv from "dotenv";
 import bodyParser from 'body-parser';
+import { databaseConnection } from './src/database/index.js';
+import { intigrateDB } from './src/api/entity/index.js';
 
 dotenv.config();
 
@@ -13,12 +15,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false })) // do not know the exactly use
 
 setup(app)
+intigrateDB()
 
-app.post('/', (req, res) => {
-  console.log(req.body);
+databaseConnection()
+.then(() => {
+  app.listen(PORT, () => {
+    console.log(`server is running on port ${PORT}`);
+  })
 })
-
-
-app.listen(PORT, () => {
-  console.log(`server is running on port ${PORT}`);
+.catch((error) => {
+  console.log("Error in connecting to database", error);
 })

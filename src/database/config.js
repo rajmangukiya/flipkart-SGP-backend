@@ -1,10 +1,9 @@
-const development = {
-  host: 'localhost', // server name or IP address;
-  port: 5432,
-  database: 'flipkrt',
-  user: 'postgres',
-  password: '1234'
-};
+import Sequelize from 'sequelize';
+
+const development = new Sequelize('flipkart', 'postgres', '1234', {
+  host: 'localhost',
+  dialect: 'postgres'
+});
 
 export {
   development
