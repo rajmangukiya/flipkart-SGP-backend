@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { privateKey } from "./jwt.config.js";
+import { privateKey } from "./jwt.config";
 
 const getToken = (data) => {
   const bearerToken = `Bearer ${jwt.sign(data, privateKey)}`;

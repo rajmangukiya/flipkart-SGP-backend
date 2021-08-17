@@ -1,10 +1,12 @@
 import { celebrate } from "celebrate";
 import Joi from "joi";
-import { bcryptPassword, comparePassword } from "../../utils/bcrypt.js";
-import { User } from "../entity/user.js";
+import { bcryptPassword, comparePassword } from "../../utils/bcrypt";
 import httpStatus from "http-status";
-import { apiResponse } from "../../utils/api-response.js";
-import { getToken } from "../../utils/jwt.js";
+import { apiResponse } from "../../utils/api-response";
+import { getToken } from "../../utils/jwt";
+import { getRepository } from "typeorm";
+import User from "../entity/User"
+import { Request, Response } from "express";
 
 const signup = {
   validator: celebrate({
@@ -17,10 +19,12 @@ const signup = {
       api_key: Joi.string().required(),
     })
   }),
-  controller: async (req, res) => {
+  controller: async (req: Request, res: Response) => {
     try {
 
-      const checkUser = await User.findOne({
+      const userRepo = getRepository(User);
+
+      const checkUser = await userRepo.findOne({
         where: {
           email: req.body.email
         }
@@ -38,14 +42,27 @@ const signup = {
 
       const password = await bcryptPassword(req.body.password, 10);
 
-      const user = await User.create({
+      const newUser = {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         email: req.body.email,
         mobile: req.body.mobile,
         password,
         api_key: req.body.api_key,
-      })
+      }
+
+      const user = userRepo.create(newUser);
+      const result = await userRepo.save(user);
+
+      if (!result) {
+        return apiResponse(
+          res,
+          httpStatus.BAD_REQUEST,
+          null,
+          "Error",
+          "Error in creating user"
+        )
+      }
 
       return apiResponse(
         res,
@@ -73,9 +90,12 @@ const login = {
       password: Joi.string().required().min(8),
     })
   }),
-  controller: async (req, res) => {
+  controller: async (req: Request, res: Response) => {
     try {
-      const emailCheck = await User.findOne({
+
+      const userRepo = getRepository(User);
+
+      const emailCheck = await userRepo.findOne({
         where: {
           email: req.body.email
         }
@@ -124,7 +144,64 @@ const login = {
   }
 }
 
+const getUserByToken = {
+  validator: celebrate({
+    body: Joi.object().keys({
+      
+    })
+  }),
+  controller: async (req: any, res: Response) => {
+    try {
+
+      const userRepo = getRepository(User);
+      
+      const user = await userRepo.findOne({
+        where: { id: req.user.id },
+      });
+
+      if (!user) {
+        return apiResponse(
+          res,
+          httpStatus.NOT_FOUND,
+          null,
+          "Error",
+          "User not found with this token"
+        )
+      }
+
+      const result = {
+        id: user.id,
+        avatar: user.avatar,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        mobile: user.mobile,
+      }
+
+      return apiResponse(
+        res,
+        httpStatus.OK,
+        result,
+        "User got successfull",
+        null
+      )
+
+    } catch (error) {
+
+      return apiResponse(
+        res,
+        httpStatus.BAD_GATEWAY,
+        null,
+        "Error",
+        "Error in controller: " + error
+      )
+
+    }
+  }
+}
+
 export {
   signup,
-  login
+  login,
+  getUserByToken
 }
