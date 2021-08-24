@@ -1,6 +1,6 @@
 import jwt from "express-jwt"
-import { privateKey } from "../../utils/jwt.config.js"
-import { userRouter } from "./user.js"
+import { privateKey } from "../../utils/jwt.config"
+import { userRouter } from "./user"
 
 export const setup = (app) => {
   app.use("/api/v1", jwt({ algorithms: ["HS256"], secret: privateKey }).unless({
