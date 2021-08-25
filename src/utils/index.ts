@@ -19,9 +19,17 @@ const addOrders = async (order) => {
 
       const newOrder = {
         order_id: order['Order Id'],
+        shipment_id: order['Shipment Id'],
         order_on: order['Ordered On'],
-        status: order['Order State'],
-        amount: order['Invoice Amount'],
+        hsn_code: order['HSN CODE'],
+        order_state: order['Order State'],
+
+        product: order['Product'],
+        invoice_no: order['Invoice No.'],
+        invoice_date: order['Invoice Date'],
+        invoice_amount : order['Invoice Amount'],
+        selling_price : order['Selling Price'],
+        selling_charge : order['Selling Charge'],
         tracking_id: order['Tracking ID'],
       }
 

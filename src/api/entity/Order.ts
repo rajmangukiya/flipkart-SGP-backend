@@ -15,13 +15,34 @@ export default class Order {
   order_id: string;
 
   @Column()
-  order_on: string;
+  shipment_id : string;
 
   @Column()
-  status: string;
+  order_on: Date;
 
   @Column()
-  amount: string;
+  hsn_code : string;
+
+  @Column()
+  order_state : string;
+
+  @Column()
+  product : string;
+
+  @Column()
+  invoice_no : string;
+
+  @Column()
+  invoice_date : Date;
+  
+  @Column()
+  invoice_amount: number;
+
+  @Column()
+  selling_price: number;
+
+  @Column()
+  shipping_charge: number;
 
   @Column()
   tracking_id: string;
