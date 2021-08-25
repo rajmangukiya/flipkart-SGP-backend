@@ -75,7 +75,7 @@ const importOrders = {
         httpStatus.BAD_REQUEST,
         null,
         "Error",
-        "Tourcourses not added." + error
+        "Orders not added." + error
       )
     }
   },
