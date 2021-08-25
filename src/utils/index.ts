@@ -23,7 +23,6 @@ const addOrders = async (order) => {
         order_on: order['Ordered On'],
         hsn_code: order['HSN CODE'],
         order_state: order['Order State'],
-
         product: order['Product'],
         invoice_no: order['Invoice No.'],
         invoice_date: order['Invoice Date'],
