@@ -8,8 +8,6 @@ export const setup = (app) => {
     path: [
       "/api/v1/user/auth/login",
       "/api/v1/user/auth/signup",
-      "/api/v1/order/get-order",
-      "/api/v1/order/import-order",
     ]
   }))
   app.use("/api/v1/user", userRouter)
