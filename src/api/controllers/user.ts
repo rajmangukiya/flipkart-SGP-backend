@@ -14,7 +14,7 @@ const signup = {
       first_name: Joi.string().required(),
       last_name: Joi.string().required(),
       email: Joi.string().email().required(),
-      mobile: Joi.string().length(10),
+      mobile: Joi.string().length(10).required(),
       password: Joi.string().required().min(8),
       api_key: Joi.string().required(),
     })
