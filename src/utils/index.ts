@@ -55,24 +55,26 @@ const addReturnOrders = async (returnOrder) => {
         where: { order_id: returnOrder.order_id }
       })
 
+      
+
       const newOrder = {
-        order_id: returnOrder['Order ID'],
-        return_approval_date: returnOrder['Return Approval Date'],
-        return_requested_date: returnOrder['Return Requested Date'],
-        return_id: returnOrder['Return ID'],
-        tracking_id: returnOrder['Tracking ID'],
-        product: returnOrder['Product'],
-        return_type: returnOrder['Return Type'],
-        return_sub_type: returnOrder['Return Sub Type'],
-        replacement_order_item_id : returnOrder['Replacement Order Item ID'],
-        return_status : returnOrder['Return Status'],
-        return_delivery_promise_date : returnOrder['Return Delivery Promise Date'],
-        picked_up_date: returnOrder['Picked Up Date'],
-        out_for_delivery_date : returnOrder['Out For Delivery Date'],
-        completed_date : returnOrder['Completed Date'],
-        total_price : returnOrder['Total Price'],
-        return_reason: returnOrder['Return Reason'],
-        return_sub_reason: returnOrder['Return Sub-reason'],
+        order_id: returnOrder['Order ID'] || null,
+        return_approval_date: moment(returnOrder['Return Approval Date']) || null,
+        return_requested_date: moment(returnOrder['Return Requested Date']) || null,
+        return_id: returnOrder['Return ID'] || null,
+        tracking_id: returnOrder['Tracking ID'] || null,
+        product: returnOrder['Product'] || null,
+        return_type: returnOrder['Return Type'] || null,
+        return_sub_type: returnOrder['Return Sub Type'] || null,
+        replacement_order_item_id : returnOrder['Replacement Order Item ID'] || null,
+        return_status : returnOrder['Return Status'] || null,
+        return_delivery_promise_date : moment(returnOrder['Return Delivery Promise Date']) || null,
+        picked_up_date: moment(returnOrder['Picked Up Date']) || null,
+        out_for_delivery_date : moment(returnOrder['Out For Delivery Date']) || null,
+        completed_date : moment(returnOrder['Completed Date']) || null,
+        total_price : parseInt(returnOrder['Total Price']) || null,
+        return_reason: returnOrder['Return Reason'] || null,
+        return_sub_reason: returnOrder['Return Sub-reason'] || null,
       }
 
       if (!orderCheck) {
@@ -82,7 +84,7 @@ const addReturnOrders = async (returnOrder) => {
       }
       resolve(1)
     } catch (error) {
-      reject(1)
+      reject(error)
     }
   })
 }

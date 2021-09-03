@@ -12,5 +12,5 @@ export const setup = (app) => {
   }))
   app.use("/api/v1/user", userRouter)
   app.use("/api/v1/order", orderRouter)
-  app.use("/api/v1/returnorder", returnorderRouter)
+  app.use("/api/v1/return-order", returnorderRouter)
 }

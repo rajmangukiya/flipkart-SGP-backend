@@ -4,14 +4,18 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     PrimaryColumn,
+    PrimaryGeneratedColumn,
   } from "typeorm";
   
   
   
   @Entity("return_order")
   export default class ReturnOrder {
+
+    @PrimaryGeneratedColumn("uuid")
+    id: string
   
-    @PrimaryColumn()
+    @Column()
     order_id: string;
   
     @Column()
@@ -32,10 +36,14 @@ import {
     @Column()
     return_type : string;
   
-    @Column()
+    @Column({
+      nullable: true
+    })
     return_sub_type : string;
     
-    @Column()
+    @Column({
+      nullable: true
+    })
     replacement_order_item_id : string;
   
     @Column()
@@ -44,13 +52,19 @@ import {
     @Column()
     return_delivery_promise_date : Date;
     
-    @Column()
+    @Column({
+      nullable: true
+    })
     picked_up_date : Date;
   
-    @Column()
+    @Column({
+      nullable: true
+    })
     out_for_delivery_date : Date;
   
-    @Column()
+    @Column({
+      nullable: true
+    })
     completed_date : Date;
   
     @Column()

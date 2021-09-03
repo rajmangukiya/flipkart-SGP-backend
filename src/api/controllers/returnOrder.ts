@@ -32,7 +32,7 @@ const importReturnOrders = {
             temp.forEach((res) => {
               data.push(res);
             });
-          }
+          }          
 
           await Promise.all(
             data.map((item) => (
@@ -73,7 +73,7 @@ const importReturnOrders = {
         httpStatus.BAD_REQUEST,
         null,
         "Error",
-        "Return orders not added." + error
+        "Return orders not added" + error
       )
     }
   },

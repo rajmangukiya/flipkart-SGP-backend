@@ -8,7 +8,7 @@ const development: ConnectionOptions = {
   host: "localhost",
   port: 5432,
   username: "postgres",
-  password: "6164",
+  password: "1234",
   database: "flipkart",
   entities: ["src/api/entity/**/*.ts"],
   migrations: ["src/migration/**/*.ts"],
