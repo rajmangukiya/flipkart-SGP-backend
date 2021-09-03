@@ -79,22 +79,20 @@ const importOrders = {
   },
 }
 
-const getOrders = {
+const checkEmpty = {
   controller: async (req: Request, res: Response) => {
     try {
 
       const orderRepo = getRepository(Order);
       const order = await orderRepo.findOne();
 
-      if (order) {
-        return apiResponse(
-          res,
-          httpStatus.OK,
-          order ? true : false,
-          order ? "There are orders in database" : "There are no orders in database",
-          null
-        )
-      }
+      return apiResponse(
+        res,
+        httpStatus.OK,
+        order ? true : false,
+        order ? "There are orders in database" : "There are no orders in database",
+        null
+      )
 
     } catch (error) {
       return apiResponse(
@@ -167,8 +165,8 @@ const filteredOrders = {
 
       let [order, count] = await query
         // .orderBy("created_at", "DESC")
-        // .skip((req.query.page_number - 1) * req.query.per_page)
-        // .take(req.query.per_page)
+        .skip((req.query.page_number - 1) * req.query.per_page)
+        .take(req.query.per_page)
         .getManyAndCount();
 
       let result;
@@ -216,6 +214,6 @@ const filteredOrders = {
 
 export {
   importOrders,
-  getOrders,
+  checkEmpty,
   filteredOrders
 }
