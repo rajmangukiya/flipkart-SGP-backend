@@ -6,6 +6,6 @@ export const orderRouter = express.Router();
 
  orderRouter.post('/import-order', upload.any(), importOrders.controller);
 
- orderRouter.get('/check-empty', checkEmpty.controller);
+ orderRouter.get('/check-order', checkEmpty.controller);
 
  orderRouter.get('/filtered-orders', filteredOrders.validator, filteredOrders.controller);

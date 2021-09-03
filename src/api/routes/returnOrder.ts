@@ -6,6 +6,6 @@ export const returnorderRouter = express.Router();
 
 returnorderRouter.post('/import-return-order', upload.any(), importReturnOrders.controller);
 
-returnorderRouter.get('/get-return-order', getReturnOrders.controller);
+returnorderRouter.get('/check-return-order', getReturnOrders.controller);
 
 returnorderRouter.get('/filtered-return-orders', filteredReturnOrders.validator, filteredReturnOrders.controller);
