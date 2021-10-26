@@ -7,13 +7,23 @@ import {
     PrimaryGeneratedColumn,
   } from "typeorm";
   
-  
+  export enum STATUS {
+    ARRIVED = "arrived",
+    MISSING = "missing"
+}
   
   @Entity("return_order")
   export default class ReturnOrder {
 
     @PrimaryGeneratedColumn("uuid")
     id: string
+
+    @Column({
+      type: "enum",
+      enum: STATUS,
+      default: STATUS.MISSING
+  })
+    status: string;
   
     @Column()
     order_id: string;
