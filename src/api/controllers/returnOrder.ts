@@ -280,9 +280,47 @@ const changeStatus = {
   }
 }
 
+const getReturnOrder = {
+  validator: celebrate({
+    query: Joi.object().keys({
+      orderId: Joi.string().required(),
+    }),
+  }),
+
+  controller: async (req: any, res: Response) => {
+    try {
+      const returnOrderRepo = getRepository(ReturnOrder);
+
+      const returnOrder = await returnOrderRepo.findOne(req.query.orderId)
+
+      if (returnOrder) {
+        return apiResponse(
+          res,
+          httpStatus.OK,
+          returnOrder,
+          "return order found successfully",
+          null
+        )
+      }
+
+      throw new Error()
+
+    } catch (error) {
+      return apiResponse(
+        res,
+        httpStatus.BAD_REQUEST,
+        "Error",
+        "Error in controller" + error,
+        null
+      )
+    }
+  },
+};
+
 export {
   importReturnOrders,
   checkReturnEmpty,
   filteredReturnOrders,
-  changeStatus
+  changeStatus,
+  getReturnOrder
 }

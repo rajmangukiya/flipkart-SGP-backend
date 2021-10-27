@@ -125,31 +125,31 @@ const filteredOrders = {
 
       let conditions = [];
 
-      // Object.keys(req.query).map((query) => {
-      //   switch (query) {
-      //     case "date_option":
-      //       if (!req.query.start_date) break;
-      //       if (!req.query.end_date) break;
-      //       const start_date = `${req.query.start_date} 00:00:00`;
-      //       const end_date = `${moment(req.query.end_date)
-      //         .add(1, "days")
-      //         .format('yyyy-MM-DD')
-      //         .slice(0, 10)} 00:00:00`;
+      Object.keys(req.query).map((query) => {
+        switch (query) {
+          case "date_option":
+            if (!req.query.start_date) break;
+            if (!req.query.end_date) break;
+            const start_date = moment(req.query.start_date).format().toString();
+            const end_date = moment(req.query.end_date)
+              .add(1, "days")
+              .format('yyyy-MM-DD')
+              .toString();
 
-      //       conditions.push(
-      //         `order_on BETWEEN '${start_date}' AND '${end_date}'`
-      //       );
-      //       break;
-      //     case "order_id":
-      //       if (!req.query.order_id) break;
-      //       conditions.push(`order_id = '${req.query.order_id}'`);
-      //       break;
-      //     case "status":
-      //       if (!req.query.status) break;
-      //       conditions.push(`order_state = '${req.query.status}'`);
-      //       break;
-      //   }
-      // });
+            conditions.push(
+              `order_on BETWEEN '${start_date}' AND '${end_date}'`
+            );
+            break;
+          case "order_id":
+            if (!req.query.order_id) break;
+            conditions.push(`order_id = '${req.query.order_id}'`);
+            break;
+          case "status":
+            if (!req.query.status) break;
+            conditions.push(`order_state = '${req.query.status}'`);
+            break;
+        }
+      });
 
       let query = orderRepo
         .createQueryBuilder("order")
@@ -182,6 +182,7 @@ const filteredOrders = {
             product: x.product,
             invoice_no: x.invoice_no,
             invoice_date: x.invoice_date,
+            invoice_amount: x.invoice_amount,
             selling_price: x.selling_price,
             shipping_charge: x.shipping_charge,
             tracking_id: x.tracking_id,
@@ -212,8 +213,46 @@ const filteredOrders = {
   },
 };
 
+const getOrder = {
+  validator: celebrate({
+    query: Joi.object().keys({
+      orderId: Joi.string().required(),
+    }),
+  }),
+
+  controller: async (req: any, res: Response) => {
+    try {
+      const orderRepo = getRepository(Order);
+
+      const order = await orderRepo.findOne(req.query.orderId)
+
+      if (order) {
+        return apiResponse(
+          res,
+          httpStatus.OK,
+          order,
+          "order found successfully",
+          null
+        )
+      }
+
+      throw new Error()
+
+    } catch (error) {
+      return apiResponse(
+        res,
+        httpStatus.BAD_REQUEST,
+        "Error",
+        "Error in controller" + error,
+        null
+      )
+    }
+  },
+};
+
 export {
   importOrders,
   checkEmpty,
-  filteredOrders
+  filteredOrders,
+  getOrder
 }

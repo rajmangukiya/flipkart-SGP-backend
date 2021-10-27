@@ -22,7 +22,7 @@ const addOrders = async (order) => {
       const newOrder = {
         order_id: order['Order Id'],
         shipment_id: order['Shipment ID'],
-        order_on: order['Ordered On'],
+        order_on: moment(order['Ordered On']).format().toString(),
         hsn_code: order['HSN CODE'],
         order_state: order['Order State'],
         product: order['Product'],

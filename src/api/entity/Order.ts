@@ -18,7 +18,7 @@ export default class Order {
   shipment_id : string;
 
   @Column()
-  order_on: Date;
+  order_on: string;
 
   @Column()
   hsn_code : string;
