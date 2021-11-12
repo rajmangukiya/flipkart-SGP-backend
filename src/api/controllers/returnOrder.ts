@@ -164,7 +164,7 @@ const filteredReturnOrders = {
       });
 
       let [order, count] = await query
-        .orderBy("return_approval_date", "DESC")
+        .orderBy("order_id", "DESC")
         .skip((req.query.page_number - 1) * req.query.per_page)
         .take(req.query.per_page)
         .getManyAndCount();
